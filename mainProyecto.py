@@ -2,30 +2,31 @@ from shunting_yard import shunting_yard
 from afn import construir_AFN
 from afd import convertir_AFD
 from minimizacion import minimizar_AFD
-from simulacion import simular_AFN, simular_AFD
 from graficos import graficar
 
-def procesar_expresion(expresion, cadena):
-    postfix = shunting_yard(expresion)
-    afn = construir_AFN(postfix)
-    afd = convertir_AFD(afn)
-    afd_minimizado = minimizar_AFD(afd)
+def procesar_expresion(expresion):
+    #Convierte la expresión infix a postfix
+    postfix = shunting_yard(expresion)  
+    #Construye el AFN
+    afn = construir_AFN(postfix)  
+    #Convierte el AFN en un AFD
+    afd = convertir_AFD(afn)  
+    #Minimiza el AFD
+    afd_minimizado = minimizar_AFD(afd)  
     
-    print(f"Simulación AFN: {'Sí' if simular_AFN(afn, cadena) else 'No'}")
-    print(f"Simulación AFD: {'Sí' if simular_AFD(afd_minimizado, cadena) else 'No'}")
-    
-    # Generar grafos de los autómatas
-    graficar(afn, 'AFN')
-    graficar(afd, 'AFD_minimizado')
-#Leer el archivo y procesar cada expresion regular
+    # Generar los grafos de automatas
+    graficar(afn, f'AFN_{expresion}')
+    graficar(afd_minimizado, f'AFD_minimizado_{expresion}')
+
 def procesar_data(ruta_archivo):
     with open(ruta_archivo, 'r') as archivo:
         for linea in archivo:
-            #Para una expresion regular y una cadena en cada linea, separadas por ,
-            expresion, cadena = linea.strip().split(',')
-            procesar_expresion(expresion, cadena)
+            #Procesar la expresion regular
+            expresion = linea.strip()
+            procesar_expresion(expresion)
 
 if __name__ == "__main__":
     # Ruta del archivo
     ruta_archivo = r"C:\Users\javie\Desktop\Tareas\Teoria compu\P1TeoriaCompu\expresiones.txt"
+    # Leer el archivo
     procesar_data(ruta_archivo)
