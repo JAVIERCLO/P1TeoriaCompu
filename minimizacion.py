@@ -1,7 +1,8 @@
 def minimizar_AFD(afd):
-    #Crear particiones de estados iniciales y de aceptacion
-    particiones = [afd.aceptacion, set(afd.estados) - afd.aceptacion]
+    # Crear particiones de estados iniciales y de aceptación
+    particiones = [afd.aceptacion, set(frozenset(estado) for estado in afd.estados) - afd.aceptacion]
     nueva_particion = []
+    
     while True:
         for particion in particiones:
             simbolo_transiciones = {}
@@ -10,9 +11,10 @@ def minimizar_AFD(afd):
                     if simbolo in estado:
                         simbolo_transiciones[estado] = afd.transiciones.get((estado, simbolo))
             nueva_particion.extend(simbolo_transiciones.values())
+        
         if nueva_particion == particiones:
             break
         particiones = nueva_particion[:]
 
-    #retorna el AFD minimizado
+    # Retorna el AFD minimizado
     return afd
