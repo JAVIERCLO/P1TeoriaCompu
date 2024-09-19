@@ -1,0 +1,6 @@
+// AFN_(a*|b*)c
+digraph {
+	2068268354976 [shape=circle]
+	2068268355024 [shape=doublecircle]
+	2068268354976 -> 2068268355024 [label=c]
+}

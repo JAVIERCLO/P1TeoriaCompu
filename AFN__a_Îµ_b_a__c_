@@ -1,0 +1,6 @@
+// AFN_(a|Îµ)b(a+)c?
+digraph {
+	2068268354832 [shape=circle]
+	2068268355072 [shape=doublecircle]
+	2068268354832 -> 2068268355072 [label=c]
+}
