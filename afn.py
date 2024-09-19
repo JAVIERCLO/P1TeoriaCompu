@@ -2,25 +2,25 @@ from estado import Estado
 
 class AFN:
     def __init__(self, inicio=None, aceptacion=None):
-        # Lista de todos los estados del AFN
+        #Lista de estados
         self.estados = []
         
-        # Estado inicial
+        #Estado inicial
         self.inicio = inicio or Estado()
         self.estados.append(self.inicio)
         
-        # Estado de aceptación
+        #Estado de aceptacion
         self.aceptacion = aceptacion or Estado()
         self.estados.append(self.aceptacion)
 
-    # Concatenación (operador .)
+    # Concatenación .
     @staticmethod
     def concatenacion(afn1, afn2):
         afn1.aceptacion.agregar_transicion('ε', afn2.inicio)
         afn1.estados.extend(afn2.estados)  # Combina los estados de ambos autómatas
         return AFN(afn1.inicio, afn2.aceptacion)
 
-    # Unión (operador |)
+    #Union |
     @staticmethod
     def union(afn1, afn2):
         nuevo_inicio = Estado()
@@ -31,13 +31,13 @@ class AFN:
         afn1.aceptacion.agregar_transicion('ε', nuevo_aceptacion)
         afn2.aceptacion.agregar_transicion('ε', nuevo_aceptacion)
         
-        # Combina los estados de ambos autómatas más los nuevos estados
+        #Combina los estados de los automatas con los nuevos
         nuevo_afn = AFN(nuevo_inicio, nuevo_aceptacion)
         nuevo_afn.estados.extend(afn1.estados)
         nuevo_afn.estados.extend(afn2.estados)
         return nuevo_afn
 
-    # Estrella de Kleene (operador *)
+    #Cerradura Kleen *
     @staticmethod
     def kleen(afn):
         nuevo_inicio = Estado()
@@ -48,40 +48,40 @@ class AFN:
         afn.aceptacion.agregar_transicion('ε', afn.inicio)
         afn.aceptacion.agregar_transicion('ε', nuevo_aceptacion)
         
-        # Añade los nuevos estados al autómata
+        #agragar los nuevos estados al automata
         nuevo_afn = AFN(nuevo_inicio, nuevo_aceptacion)
         nuevo_afn.estados.extend(afn.estados)
         return nuevo_afn
 
-    # Símbolo 
+    #Simbolo 
     @staticmethod
     def simbolo(simbolo):
         inicio = Estado()
         aceptacion = Estado()
         inicio.agregar_transicion(simbolo, aceptacion)
         
-        # Crear el AFN con los dos estados
+        #Crear el AFN con los dos estados
         nuevo_afn = AFN(inicio, aceptacion)
         return nuevo_afn
 
 
-# Construcción del AFN a partir de una expresión postfix
+#Construir afn desde postfix
 def construir_AFN(postfix):
     pila = []
     
     for c in postfix:
-        if c.isalnum() or c == 'ε':  # Si es un símbolo
+        if c.isalnum() or c == 'ε':
             pila.append(AFN.simbolo(c))
-        elif c == '.':  # Concatenación
+        elif c == '.':  # Concatenacion
             afn2 = pila.pop()
             afn1 = pila.pop()
             pila.append(AFN.concatenacion(afn1, afn2))
-        elif c == '|':  # Unión
+        elif c == '|':  # Union
             afn2 = pila.pop()
             afn1 = pila.pop()
             pila.append(AFN.union(afn1, afn2))
-        elif c == '*':  # Estrella de Kleene
+        elif c == '*':  # kleen
             afn1 = pila.pop()
             pila.append(AFN.kleen(afn1))
     
-    return pila.pop()  # El AFN resultante es el último en la pila
+    return pila.pop()
